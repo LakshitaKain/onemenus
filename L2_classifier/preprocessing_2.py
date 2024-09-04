@@ -2,12 +2,6 @@ import numpy as np
 import cv2
 import torch
 import requests
-import yaml
-
-# Load configuration from YAML file
-def load_yaml_config(file_path):
-    with open(file_path, 'r') as file:
-        return yaml.safe_load(file)
 
 # Define the necessary preprocessing steps
 def preprocess_image(image_url, CONFIG):
