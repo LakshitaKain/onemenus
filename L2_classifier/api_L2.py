@@ -1,3 +1,4 @@
+## api_L2.py
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from clip_pipeline_2 import CLIPInfer
@@ -14,9 +15,13 @@ class PredictRequest(BaseModel):
 @router_l2.post("/predict_L2")
 async def predict_label(request: PredictRequest):
     try:
-        predicted_label = clip_infer.predict_label(request.image_url)
+        predicted_label, confidence = clip_infer.predict_label(request.image_url)
         if predicted_label is not None:
-            return {"predicted_label": int(predicted_label)}
+            return {
+                "image_url": request.image_url,
+                "predicted_label": int(predicted_label),
+                "confidence": confidence
+            }
         else:
             return {"detail": "Prediction failed."}
     except Exception as e:
