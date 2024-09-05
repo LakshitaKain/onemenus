@@ -30,7 +30,7 @@ class CLIPInfer:
         ).to(device)
 
         # Load the fine-tuned weights for the classification head
-        cls_head.load_state_dict(torch.load(self.config['weight_path'], map_location=device))
+        cls_head.load_state_dict(torch.load(self.config['weight_path'], map_location=device, weights_only=True))
         return clip_model, cls_head
 
     def predict_label(self, image_url):
@@ -48,14 +48,17 @@ class CLIPInfer:
             
             if features.dim() != 2 or features.shape[0] != 1:
                 print(f"Unexpected features shape: {features.shape}")
-                return None
+                return None, None
 
             pred = self.cls_head(features)
 
             if pred.dim() != 2 or pred.shape[0] != 1:
                 print(f"Unexpected prediction shape: {pred.shape}")
-                return None
+                return None, None
             
+            pred_probs = torch.nn.functional.softmax(pred, dim=1)
             pred_label = pred.argmax(dim=1).item()
-            return pred_label
-        return None
+            confidence = pred_probs[0, pred_label].item()
+            
+            return pred_label, confidence
+        return None, None
