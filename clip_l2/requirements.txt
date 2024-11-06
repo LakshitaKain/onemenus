@@ -1,0 +1,8 @@
+numpy
+opencv-python
+torch
+requests
+fastapi
+pydantic
+uvicorn
+clip-by-openai
