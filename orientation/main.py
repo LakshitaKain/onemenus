@@ -19,7 +19,7 @@ model.load_state_dict(torch.load(MODEL_PATH, weights_only=True, map_location=tor
 model = model.to(device=DEVICE)
 
 
-def process_image(image: np.ndarray, image_info: Dict) -> np.ndarray:
+def deskew_and_orient_correction(image: np.ndarray, image_info: Dict) -> np.ndarray:
     try:
         # print("code started")
         _, processed_image = predict_and_transform_image(model=model, image=image)
