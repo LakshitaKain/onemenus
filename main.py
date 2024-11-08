@@ -6,7 +6,7 @@ from clip_l1.main import predict as clip1_predict
 from clip_l2.main import predict_label as clip2_predict_label
 from yolo_robo.main import yolo_bg
 from orientation.main import deskew_and_orient_correction
-from cluster.main import generate_best_images_from_google_id
+from clustering.main import generate_best_images_from_google_id
 from image_utils import url_to_ndarray
 
 def main():
@@ -65,13 +65,13 @@ def main():
                         print("    Applied process_image.")
                         
                         # Add the processed image to the clustering list
-                        store_corrected_image_for_clustering.append(deskew_image_np)
+                        store_corrected_image_for_clustering.append((deskew_image_np, url))
                         print("    Image added to clustering list (deskew_image_np).")
                     
                     elif l1_label in [1, 2]:
                         if l2_label == 1:                     
                         # Add the original image to the clustering list
-                            store_corrected_image_for_clustering.append(image_np)
+                            store_corrected_image_for_clustering.append((image_np, url))
                             print(f"    Image added to clustering list (image_np) for label {l1_label}.")
                 else:
                     print("    l2_label is 0. Skipping this image.")
