@@ -1,12 +1,11 @@
 import numpy as np
 import cv2
 import torch
-from config import Config
 
-def preprocess_image(image_array):
+def preprocess_image(image_array, input_size):
     try:
         # Resize the image to the required input size
-        img_array = cv2.resize(image_array, Config.INPUT_SIZE)
+        img_array = cv2.resize(image_array, input_size)
         
         # Convert the image to a tensor and move the channels to the first dimension
         img_tensor = torch.tensor(img_array, dtype=torch.float32).permute(2, 0, 1).unsqueeze(0)
@@ -20,8 +19,7 @@ def preprocess_image(image_array):
         std = torch.tensor([0.229, 0.224, 0.225], dtype=torch.float32).view(1, 3, 1, 1) * 255
         img_tensor = (img_tensor - mean) / std
         
-        # Move the tensor to the appropriate device
-        return img_tensor.to(Config.DEVICE)
+        return img_tensor
     
     except Exception as e:
         raise RuntimeError(f"Error in image preprocessing: {e}")
